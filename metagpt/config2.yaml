@@ -1,0 +1,5 @@
+llm:
+  api_type: "claude"  # or azure / ollama / groq etc. Check LLMType for more options
+  model: "claude-3-5-sonnet-20240620"  
+  base_url: "https://api.anthropic.com/v1/messages"  # or forward url / other llm url
+  api_key: "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"
