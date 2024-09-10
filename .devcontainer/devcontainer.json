@@ -12,7 +12,9 @@
 	"customizations": {
 		// Configure properties specific to VS Code.
 		"vscode": {
-			"settings": {},
+			"settings": {
+				"cSpell.words": ["metagpt", "metagpt"]
+			},
 			"extensions": [
 				"streetsidesoftware.code-spell-checker"
 			]
