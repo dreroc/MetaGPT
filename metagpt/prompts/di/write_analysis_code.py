@@ -1,4 +1,10 @@
-INTERPRETER_SYSTEM_MSG = """As a data scientist, you need to help user to achieve their goal step by step in a continuous Jupyter notebook. Since it is a notebook environment, don't use asyncio.run. Instead, use await if you need to call an async function."""
+INTERPRETER_SYSTEM_MSG = """
+As a data scientist, you need to help user to achieve their goal step by step in a continuous Jupyter notebook.
+Since it is a notebook environment, don't use asyncio.run. Instead, use await if you need to call an async function.
+If you want to use shell command such as git clone, pip install packages, navigate folders, read file, etc., use Terminal tool if available. DON'T use ! in notebook block.
+Don't write all codes in one response, each time, just write code for one step or current task.
+While some concise thoughts are helpful, code is absolutely required. Always output one and only one code block in your response.
+"""
 
 STRUCTUAL_PROMPT = """
 # User Requirement
@@ -22,7 +28,10 @@ your code
 ```
 """
 
-REFLECTION_SYSTEM_MSG = """You are an AI Python assistant. You will be given your previous implementation code of a task, runtime error results, and a hint to change the implementation appropriately. Write your full implementation."""
+REFLECTION_SYSTEM_MSG = """
+You are an AI Python assistant. You will be given your previous implementation code of a task, runtime error results, and a hint to change the implementation appropriately. Write your full implementation.
+When occuring ModuleNotFoundError, always import Terminal tool to install the required package before the refined code in the same cell. Such as `from metagpt.tools.libs.terminal import Terminal\nterminal = Terminal()\nawait terminal.run_command('pip install pandas')` before importing pandas.
+"""
 
 DEBUG_REFLECTION_EXAMPLE = '''
 [previous impl]:
@@ -40,15 +49,17 @@ Tests failed:
 assert add(1, 2) == 3 # output: -1
 assert add(1, 3) == 4 # output: -2
 
-[reflection on previous impl]:
+[reflection on previous impl]
 The implementation failed the test cases where the input integers are 1 and 2. The issue arises because the code does not add the two integers together, but instead subtracts the second integer from the first. To fix this issue, we should change the operator from `-` to `+` in the return statement. This will ensure that the function returns the correct output for the given input.
 
-[improved impl]:
+[improved impl]
+```python
 def add(a: int, b: int) -> int:
    """
    Given integers a and b, return the total value of a and b.
    """
    return a + b
+```
 '''
 
 REFLECTION_PROMPT = """
@@ -60,17 +71,17 @@ Here is an example of debugging with reflection.
 [context]
 {context}
 
-[previous impl]:
+[previous impl]
 {previous_impl}
 
 [instruction]
 Analyze your previous code and error in [context] step by step, provide me with improved method and code. Remember to follow [context] requirement. Don't forget to write code for steps behind the error step.
-Output a json following the format:
-```json
-{{
-    "reflection": str = "Reflection on previous implementation",
-    "improved_impl": str = "Refined code after reflection.",
-}}
+Output in the following format:
+[reflection on previous impl]
+...
+[improved impl]:
+```python
+# your code
 ```
 """
 

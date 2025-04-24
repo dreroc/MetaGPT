@@ -6,8 +6,6 @@
 """
 from __future__ import annotations
 
-import json
-
 from metagpt.actions import Action
 from metagpt.prompts.di.write_analysis_code import (
     CHECK_DATA_PROMPT,
@@ -30,9 +28,10 @@ class WriteAnalysisCode(Action):
         )
 
         rsp = await self._aask(reflection_prompt, system_msgs=[REFLECTION_SYSTEM_MSG])
-        reflection = json.loads(CodeParser.parse_code(block=None, text=rsp))
-
-        return reflection["improved_impl"]
+        # reflection = json.loads(CodeParser.parse_code(block=None, text=rsp))
+        # return reflection["improved_impl"]
+        reflection = CodeParser.parse_code(block=None, text=rsp)
+        return reflection
 
     async def run(
         self,
@@ -41,6 +40,7 @@ class WriteAnalysisCode(Action):
         tool_info: str = "",
         working_memory: list[Message] = None,
         use_reflection: bool = False,
+        memory: list[Message] = None,
         **kwargs,
     ) -> str:
         structual_prompt = STRUCTUAL_PROMPT.format(
@@ -50,14 +50,15 @@ class WriteAnalysisCode(Action):
         )
 
         working_memory = working_memory or []
-        context = self.llm.format_msg([Message(content=structual_prompt, role="user")] + working_memory)
+        memory = memory or []
+        context = self.llm.format_msg(memory + [Message(content=structual_prompt, role="user")] + working_memory)
 
         # LLM call
         if use_reflection:
             code = await self._debug_with_reflection(context=context, working_memory=working_memory)
         else:
             rsp = await self.llm.aask(context, system_msgs=[INTERPRETER_SYSTEM_MSG], **kwargs)
-            code = CodeParser.parse_code(block=None, text=rsp)
+            code = CodeParser.parse_code(text=rsp, lang="python")
 
         return code
 
@@ -69,5 +70,5 @@ class CheckData(Action):
         code_written = "\n\n".join(code_written)
         prompt = CHECK_DATA_PROMPT.format(code_written=code_written)
         rsp = await self._aask(prompt)
-        code = CodeParser.parse_code(block=None, text=rsp)
+        code = CodeParser.parse_code(text=rsp)
         return code

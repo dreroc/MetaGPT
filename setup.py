@@ -27,7 +27,7 @@ extras_require = {
     "selenium": ["selenium>4", "webdriver_manager", "beautifulsoup4"],
     "search-google": ["google-api-python-client==2.94.0"],
     "search-ddg": ["duckduckgo-search~=4.1.1"],
-    "ocr": ["paddlepaddle==2.4.2", "paddleocr~=2.7.3", "tabulate==0.9.0"],
+    # "ocr": ["paddlepaddle==2.4.2", "paddleocr~=2.7.3", "tabulate==0.9.0"],
     "rag": [
         "llama-index-core==0.10.15",
         "llama-index-embeddings-azure-openai==0.1.6",
@@ -60,10 +60,8 @@ extras_require["test"] = [
     "azure-cognitiveservices-speech~=1.31.0",
     "aioboto3~=12.4.0",
     "gradio==3.0.0",
-    "grpcio-status==1.48.2",
-    "grpcio-tools==1.48.2",
     "google-api-core==2.17.1",
-    "protobuf==3.19.6",
+    "protobuf~=4.25.5",
     "pylint==3.0.3",
     "pybrowsers",
 ]
@@ -99,7 +97,7 @@ extras_require["android_assistant"] = [
 
 setup(
     name="metagpt",
-    version="0.8.1",
+    version="1.0.0",
     description="The Multi-Agent Framework",
     long_description=long_description,
     long_description_content_type="text/markdown",
