@@ -67,5 +67,12 @@ async def test_serialize():
         team.serialize(Path(dirname) / "team.json")
 
 
-if __name__ == "__main__":
-    pytest.main([__file__, "-s"])
+@pytest.mark.asyncio
+async def test_generate_corruption_report(mocker, context):
+    with TemporaryDirectory() as dirname:
+        topic = "corruption in government"
+        content = "# Corruption Report\n## Findings\nDetails about the corruption..."
+        researcher.RESEARCH_PATH = Path(dirname)
+        role = researcher.Researcher(context=context)
+        role.generate_corruption_report(topic, content)
+        assert (researcher.RESEARCH_PATH / f"{topic}_corruption_report.md").read_text().startswith("# Corruption Report")

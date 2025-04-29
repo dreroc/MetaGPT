@@ -341,3 +341,31 @@ def get_research_system_text(topic: str, language: str):
         The system text for conducting research.
     """
     return " ".join((RESEARCH_TOPIC_SYSTEM.format(topic=topic), LANG_PROMPT.format(language=language)))
+
+
+class InvestigateStrangeWealth(Action):
+    """Action class to investigate the strange wealth of certain cabinet members."""
+
+    name: str = "InvestigateStrangeWealth"
+    i_context: Optional[str] = None
+    desc: str = "Investigate the strange wealth of certain cabinet members."
+
+    async def run(
+        self,
+        members: list[str],
+        system_text: str = RESEARCH_BASE_SYSTEM,
+    ) -> str:
+        """Run the action to investigate the strange wealth of certain cabinet members.
+
+        Args:
+            members: The list of cabinet members to investigate.
+            system_text: The system text.
+
+        Returns:
+            The generated investigation report.
+        """
+        content = "\n".join(f"- {member}" for member in members)
+        prompt = f"Investigate the strange wealth of the following cabinet members:\n{content}\n"
+        logger.debug(prompt)
+        self.llm.auto_max_tokens = True
+        return await self._aask(prompt, [system_text])

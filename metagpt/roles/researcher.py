@@ -108,6 +108,14 @@ class Researcher(Role):
         filepath = RESEARCH_PATH / f"{filename}.md"
         filepath.write_text(content)
 
+    def generate_corruption_report(self, topic: str, content: str):
+        filename = re.sub(r'[\\/:"*?<>|]+', " ", topic)
+        filename = filename.replace("\n", "")
+        if not RESEARCH_PATH.exists():
+            RESEARCH_PATH.mkdir(parents=True)
+        filepath = RESEARCH_PATH / f"{filename}_corruption_report.md"
+        filepath.write_text(content)
+
 
 if __name__ == "__main__":
     import fire

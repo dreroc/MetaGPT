@@ -121,5 +121,21 @@ async def mock_collect_links_llm_ask(self, prompt: str, system_msgs):
     return ""
 
 
+@pytest.mark.asyncio
+async def test_investigate_strange_wealth(mocker, context):
+    data = None
+
+    async def mock_llm_ask(*args, **kwargs):
+        nonlocal data
+        data = f"# Investigation Report\n## Findings\n{args} {kwargs}"
+        return data
+
+    mocker.patch("metagpt.provider.base_llm.BaseLLM.aask", mock_llm_ask)
+    members = ["Jasmine Crockett", "Letitia James", "AOC", "Nancy Pelosi"]
+
+    resp = await research.InvestigateStrangeWealth(context=context).run(members)
+    assert resp == data
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-s"])
