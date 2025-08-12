@@ -198,3 +198,7 @@ metagpt/ext/sela/results/*
 
 metagpt/ext/aflow/data
 metagpt/ext/aflow/scripts/optimized
+
+
+#Ignore vscode AI rules
+.github/copilot-instructions.md
