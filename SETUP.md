@@ -139,6 +139,7 @@ If you encounter network timeouts during installation:
    ```
 
 ### Python Version Issues
+
 - Ensure you're using Python 3.9+
 - Python 3.12+ may have compatibility issues with some packages
 - Consider using Python 3.10 or 3.11 for best compatibility
@@ -160,6 +161,7 @@ If you encounter dependency conflicts:
 
 ### Security Vulnerabilities
 The setup script automatically upgrades vulnerable packages:
+
 - `aiohttp` to version >=3.9.4 (fixes DoS and directory traversal vulnerabilities)
 - `setuptools` to version >=78.1.1 (fixes path traversal and command injection)
 
