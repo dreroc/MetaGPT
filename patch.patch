@@ -1,0 +1,55 @@
+diff --git a/SETUP.md b/SETUP.md
+--- a/SETUP.md
++++ b/SETUP.md
+@@ -78,1 +78,1 @@
+-#### Mermaid CLI (for diagram generation)
++#### Mermaid CLI (for diagram generation)
+
+@@ -85,1 +85,1 @@
+-#### Playwright (for web scraping)
++#### Playwright (for web scraping)
+
+@@ -101,1 +101,1 @@
+-### Activate Environment
++### Activate Environment
+
+@@ -106,1 +106,1 @@
+-### Run MetaGPT
++### Run MetaGPT
+
+@@ -111,1 +111,1 @@
+-### Run Tests
++### Run Tests
+
+@@ -116,1 +116,1 @@
+-### Run Linting
++### Run Linting
+
+@@ -121,1 +121,1 @@
+-### Deactivate Environment
++### Deactivate Environment
+
+@@ -128,1 +128,1 @@
+-### Network Issues
++### Network Issues
+
+@@ -141,1 +141,1 @@
+-### Python Version Issues
++### Python Version Issues
+
+@@ -142,1 +142,1 @@
+-- Ensure you're using Python 3.9+
++
+- Ensure you're using Python 3.9+
+@@ -146,1 +146,1 @@
+-### Package Conflicts
++### Package Conflicts
+
+@@ -161,1 +161,1 @@
+-### Security Vulnerabilities
++### Security Vulnerabilities
+
+@@ -163,1 +163,1 @@
+-- `aiohttp` to version >=3.9.4 (fixes DoS and directory traversal vulnerabilities)
++
+- `aiohttp` to version >=3.9.4 (fixes DoS and directory traversal vulnerabilities)
