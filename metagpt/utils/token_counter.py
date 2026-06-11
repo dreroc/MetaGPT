@@ -148,6 +148,7 @@ TOKEN_COSTS = {
         "prompt": 0.0,
         "completion": 0.0,
     },  # start, for Llama API
+    "llama-4-Scout-17B-16E-Instruct-FP8": {"prompt": 0.0, "completion": 0.0},  # start, for Llama API
     "llama-4-Maverick-17B-128E-Instruct-FP8": {"prompt": 0.0, "completion": 0.0},
     "llama-3.3-8B-Instruct": {"prompt": 0.0, "completion": 0.0},
     "llama-3.3-70B-Instruct": {"prompt": 0.0, "completion": 0.0},  # end, for Llama API

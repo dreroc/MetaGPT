@@ -1,6 +1,7 @@
 import asyncio
 import os
 import re
+import sys
 from asyncio import Queue
 from asyncio.subprocess import PIPE, STDOUT
 from typing import Optional
@@ -22,8 +23,17 @@ class Terminal:
     """
 
     def __init__(self):
-        self.shell_command = ["bash"]  # FIXME: should consider windows support later
-        self.command_terminator = "\n"
+        if sys.platform.startswith("win"):
+            self.shell_command = ["cmd.exe"]  # Windows
+            self.executable = None
+            self.command_terminator = "\r\n"
+            self.pwd_command = "cd"
+        else:
+            self.shell_command = ["bash"]  # Linux / macOS
+            self.executable = "bash"
+            self.command_terminator = "\n"
+            self.pwd_command = "pwd"
+
         self.stdout_queue = Queue(maxsize=1000)
         self.observer = TerminalReporter()
         self.process: Optional[asyncio.subprocess.Process] = None
@@ -41,17 +51,17 @@ class Terminal:
             stdin=PIPE,
             stdout=PIPE,
             stderr=STDOUT,
-            executable="bash",
+            executable=self.executable,
             env=os.environ.copy(),
-            cwd=DEFAULT_WORKSPACE_ROOT.absolute(),
+            cwd=str(DEFAULT_WORKSPACE_ROOT) if sys.platform.startswith("win") else DEFAULT_WORKSPACE_ROOT,  # Windows
         )
         await self._check_state()
 
     async def _check_state(self):
         """
-        Check the state of the terminal, e.g. the current directory of the terminal process. Useful for agent to understand.
+        Check the state of the terminal, e.g. the current directory.
         """
-        output = await self.run_command("pwd")
+        output = await self.run_command(self.pwd_command)
         logger.info("The terminal is at:", output)
 
     async def run_command(self, cmd: str, daemon=False) -> str:
@@ -74,20 +84,21 @@ class Terminal:
         output = ""
         # Remove forbidden commands
         commands = re.split(r"\s*&&\s*", cmd)
+        skip_cmd = "echo Skipped" if sys.platform.startswith("win") else "true"
         for cmd_name, reason in self.forbidden_commands.items():
             # "true" is a pass command in linux terminal.
             for index, command in enumerate(commands):
                 if cmd_name in command:
-                    output += f"Failed to execut {command}. {reason}\n"
-                    commands[index] = "true"
+                    output += f"Failed to execute {command}. {reason}\n"
+                    commands[index] = skip_cmd
         cmd = " && ".join(commands)
-
         # Send the command
         self.process.stdin.write((cmd + self.command_terminator).encode())
-        self.process.stdin.write(
-            f'echo "{END_MARKER_VALUE}"{self.command_terminator}'.encode()  # write EOF
-        )  # Unique marker to signal command end
+
+        marker_cmd = f"echo {END_MARKER_VALUE}"
+        self.process.stdin.write((marker_cmd + self.command_terminator).encode())  # Unique marker to signal command end
         await self.process.stdin.drain()
+
         if daemon:
             asyncio.create_task(self._read_and_process_output(cmd))
         else:
@@ -116,7 +127,8 @@ class Terminal:
             This function wraps `run_command`, prepending the necessary Conda activation commands
             to ensure the specified environment is active for the command's execution.
         """
-        cmd = f"conda run -n {env} {cmd}"
+        # windows & linux conda run
+        cmd = f"conda activate {env} && {cmd}" if sys.platform.startswith("win") else f"conda run -n {env} {cmd}"
         return await self.run_command(cmd, daemon=daemon)
 
     async def get_stdout_output(self) -> str:
@@ -147,10 +159,10 @@ class Terminal:
                     continue
                 *lines, tmp = output.splitlines(True)
                 for line in lines:
-                    line = line.decode()
+                    line = line.decode(errors="ignore")
                     ix = line.rfind(END_MARKER_VALUE)
                     if ix >= 0:
-                        line = line[0:ix]
+                        line = line[:ix]
                         if line:
                             await observer.async_report(line, "output")
                             # report stdout in real-time
@@ -164,8 +176,9 @@ class Terminal:
 
     async def close(self):
         """Close the persistent shell process."""
-        self.process.stdin.close()
-        await self.process.wait()
+        if self.process:
+            self.process.stdin.close()
+            await self.process.wait()
 
 
 @register_tool(include_functions=["run"])
