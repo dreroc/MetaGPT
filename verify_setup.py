@@ -31,9 +31,7 @@ def check_virtual_env():
     print("\n🔧 Checking virtual environment...")
 
     # Check if in virtual environment
-    if hasattr(sys, "real_prefix") or (
-        hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
-    ):
+    if hasattr(sys, "real_prefix") or (hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix):
         print("   ✅ Running in virtual environment")
         print(f"   📍 Python executable: {sys.executable}")
         return True
@@ -89,9 +87,7 @@ def check_core_dependencies():
         if check_package_import(package, desc):
             optional_count += 1
 
-    print(
-        f"\n   📊 Optional dependencies: {optional_count}/{len(optional_deps)} available"
-    )
+    print(f"\n   📊 Optional dependencies: {optional_count}/{len(optional_deps)} available")
     return all_good
 
 
@@ -127,9 +123,7 @@ def check_console_script():
     print("\n🎯 Checking console script...")
 
     try:
-        result = subprocess.run(
-            ["metagpt", "--help"], capture_output=True, text=True, timeout=10
-        )
+        result = subprocess.run(["metagpt", "--help"], capture_output=True, text=True, timeout=10)
         if result.returncode == 0:
             print("   ✅ 'metagpt' command is available")
             return True
@@ -174,17 +168,13 @@ def check_optional_tools():
 
     # Check Node.js and npm for mermaid-cli
     try:
-        result = subprocess.run(
-            ["npm", "--version"], capture_output=True, text=True, timeout=5
-        )
+        result = subprocess.run(["npm", "--version"], capture_output=True, text=True, timeout=5)
         if result.returncode == 0:
             print(f"   ✅ npm available (version {result.stdout.strip()})")
 
             # Check mermaid-cli
             try:
-                result = subprocess.run(
-                    ["mmdc", "--version"], capture_output=True, text=True, timeout=5
-                )
+                result = subprocess.run(["mmdc", "--version"], capture_output=True, text=True, timeout=5)
                 if result.returncode == 0:
                     print("   ✅ mermaid-cli available")
                 else:
@@ -202,9 +192,7 @@ def check_optional_tools():
 
     # Check playwright
     try:
-        result = subprocess.run(
-            ["playwright", "--version"], capture_output=True, text=True, timeout=5
-        )
+        result = subprocess.run(["playwright", "--version"], capture_output=True, text=True, timeout=5)
         if result.returncode == 0:
             print("   ✅ Playwright available")
         else:
