@@ -15,14 +15,14 @@ repos:
             .*__init__\.py$
             )
 
-  - repo: git@github.com:astral-sh/ruff-pre-commit.git
+  - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
     rev: v0.0.284
     hooks:
       - id: ruff
         args: [ --fix ]
 
-  - repo: git@github.com:psf/black.git
+  - repo: https://github.com/psf/black
     rev: 23.3.0
     hooks:
       - id: black
