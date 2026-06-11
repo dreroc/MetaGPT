@@ -13,65 +13,63 @@ from pathlib import Path
 def demonstrate_basic_imports():
     """Demonstrate that basic MetaGPT modules can be imported."""
     print("🧪 Testing basic MetaGPT imports...")
-    
+
     try:
-        import metagpt
+        import metagpt  # noqa: F401
+
         print("   ✅ metagpt - Core module")
-        
+
         # Try to import some core components
         try:
-            from metagpt.schema import Message
+            from metagpt.schema import Message  # noqa: F401
+
             print("   ✅ metagpt.schema.Message - Basic schema")
         except ImportError as e:
             print(f"   ⚠️  metagpt.schema.Message - {e}")
-            
+
         try:
-            from metagpt.config2 import Config
+            from metagpt.config2 import Config  # noqa: F401
+
             print("   ✅ metagpt.config2.Config - Configuration")
         except ImportError as e:
             print(f"   ⚠️  metagpt.config2.Config - {e}")
-            
+
         try:
-            from metagpt.roles.role import Role
+            from metagpt.roles.role import Role  # noqa: F401
+
             print("   ✅ metagpt.roles.role.Role - Base role class")
         except ImportError as e:
             print(f"   ⚠️  metagpt.roles.role.Role - {e}")
-            
+
     except ImportError as e:
         print(f"   ❌ Could not import metagpt: {e}")
         return False
-    
+
     return True
 
 
 def check_project_structure():
     """Check the project structure."""
     print("\n📁 Checking project structure...")
-    
-    important_dirs = [
-        "metagpt",
-        "tests", 
-        "config",
-        "docs",
-        "examples"
-    ]
-    
+
+    important_dirs = ["metagpt", "tests", "config", "docs", "examples"]
+
     for dir_name in important_dirs:
         dir_path = Path(dir_name)
         if dir_path.exists() and dir_path.is_dir():
             print(f"   ✅ {dir_name}/ - Found")
         else:
             print(f"   ❌ {dir_name}/ - Missing")
-    
+
     # Check important files
     important_files = [
         "requirements.txt",
         "setup.py",
         "README.md",
         "setup_venv.sh",
-        "verify_setup.py"
+        "verify_setup.py",
     ]
-    
+
     for file_name in important_files:
         file_path = Path(file_name)
         if file_path.exists() and file_path.is_file():
@@ -83,18 +81,18 @@ def check_project_structure():
 def demonstrate_config_loading():
     """Demonstrate configuration loading."""
     print("\n⚙️  Testing configuration loading...")
-    
+
     config_paths = [
         Path.home() / ".metagpt" / "config2.yaml",
-        Path("config") / "config2.yaml"
+        Path("config") / "config2.yaml",
     ]
-    
+
     for config_path in config_paths:
         if config_path.exists():
             print(f"   ✅ Config found: {config_path}")
             try:
                 # Basic file reading test
-                with open(config_path, 'r') as f:
+                with open(config_path, "r") as f:
                     content = f.read()
                     if len(content) > 0:
                         print(f"   ✅ Config readable ({len(content)} chars)")
@@ -111,7 +109,7 @@ def show_next_steps():
     """Show what to do next."""
     print("\n🎯 Next Steps for Full Setup:")
     print("=" * 40)
-    
+
     steps = [
         "1. Install dependencies:",
         "   pip install -r requirements.txt",
@@ -128,13 +126,13 @@ def show_next_steps():
         "   python verify_setup.py",
         "",
         "5. Run MetaGPT:",
-        "   metagpt \"Create a simple Python calculator\"",
+        '   metagpt "Create a simple Python calculator"',
         "",
         "6. Optional: Install additional tools:",
         "   npm install -g @mermaid-js/mermaid-cli  # For diagrams",
-        "   playwright install --with-deps chromium  # For web scraping"
+        "   playwright install --with-deps chromium  # For web scraping",
     ]
-    
+
     for step in steps:
         print(step)
 
@@ -143,24 +141,24 @@ def main():
     """Main function."""
     print("🚀 MetaGPT Usage Example")
     print("=" * 40)
-    
+
     print(f"Python version: {sys.version.split()[0]}")
     print(f"Python executable: {sys.executable}")
     print(f"Working directory: {Path.cwd()}")
-    
+
     # Run demonstrations
     import_success = demonstrate_basic_imports()
     check_project_structure()
     demonstrate_config_loading()
-    
+
     if import_success:
         print("\n✅ Basic MetaGPT structure is available!")
         print("The virtual environment is working correctly.")
     else:
         print("\n⚠️  MetaGPT imports failed - dependencies may need installation.")
-    
+
     show_next_steps()
-    
+
     return 0 if import_success else 1
 
 
