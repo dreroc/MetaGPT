@@ -29,7 +29,7 @@ extras_require = {
     "search-ddg": ["duckduckgo-search~=4.1.1"],
     # "ocr": ["paddlepaddle==2.4.2", "paddleocr~=2.7.3", "tabulate==0.9.0"],
     "rag": [
-        "llama-index-core==0.10.15",
+        "llama-index-core==0.13.0",
         "llama-index-embeddings-azure-openai==0.1.6",
         "llama-index-embeddings-openai==0.1.5",
         "llama-index-embeddings-gemini==0.1.6",
