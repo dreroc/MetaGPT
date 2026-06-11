@@ -154,10 +154,10 @@ def main():
     demonstrate_config_loading()
     
     if import_success:
-        print(f"\n✅ Basic MetaGPT structure is available!")
+        print("\n✅ Basic MetaGPT structure is available!")
         print("The virtual environment is working correctly.")
     else:
-        print(f"\n⚠️  MetaGPT imports failed - dependencies may need installation.")
+        print("\n⚠️  MetaGPT imports failed - dependencies may need installation.")
     
     show_next_steps()
     

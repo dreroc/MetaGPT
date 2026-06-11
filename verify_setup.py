@@ -6,9 +6,9 @@ This script verifies that the virtual environment is properly set up
 and all core dependencies are available.
 """
 
-import sys
-import subprocess
 import importlib
+import subprocess
+import sys
 from pathlib import Path
 
 
