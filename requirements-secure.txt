@@ -1,5 +1,5 @@
 # Updated requirements with security fixes
-aiohttp>=3.9.4
+aiohttp>=3.14.3
 channels==4.0.0
 faiss_cpu==1.7.4
 fire==0.4.0
